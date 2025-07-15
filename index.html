@@ -21,22 +21,15 @@
             </div>
         </header>
 
-        <!-- Раздел для отображения категорий -->
-        <main id="category-catalog" class="category-catalog">
-            <!-- Карточки категорий будут вставлены сюда с помощью JavaScript -->
-        </main>
-
-        <!-- Раздел для отображения товаров (изначально скрыт) -->
-        <main id="product-catalog" class="product-catalog" style="display: none;">
-            <button id="back-to-categories" class="back-button" style="display: none;">← Назад к категориям</button>
+        <main id="product-catalog" class="product-catalog">
             <!-- Карточки товаров будут вставлены сюда с помощью JavaScript -->
         </main>
 
-        <div id="loader">Загрузка...</div>
+        <div id="loader">Загрузка товаров...</div>
     </div>
 
     <!-- Модальное окно корзины (изначально скрыто) -->
-    <div id="cart-modal" class="modal-overlay" style="display: none;">
+    <div id="cart-modal" class="modal-overlay">
         <div class="modal-content">
             <button id="close-cart-button" class="close-button">&times;</button>
             <h2>Ваша корзина</h2>
@@ -48,20 +41,8 @@
             </div>
             <div id="order-form">
                 <h3>Оформление заказа</h3>
-                <input type="text" id="name-input" placeholder="Ваше имя" required>
                 <input type="tel" id="phone-input" placeholder="Ваш номер телефона" required>
                 <input type="text" id="address-input" placeholder="Адрес доставки" required>
-                
-                <div class="payment-methods">
-                    <h4>Способ оплаты:</h4>
-                    <label>
-                        <input type="radio" name="payment-method" value="cash" checked> Наличными
-                    </label>
-                    <label>
-                        <input type="radio" name="payment-method" value="card"> Банковской картой
-                    </label>
-                </div>
-
                 <button id="submit-order-button" class="submit-order-button">Оформить заказ</button>
             </div>
         </div>
