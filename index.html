@@ -8,34 +8,27 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-
     <div class="container">
         <header class="shop-header">
             <div class="shop-logo">
                 <img id="logo-img" src="" alt="Логотип">
             </div>
             <h1 id="shop-title" class="shop-title"></h1>
-            <!-- Элемент для кнопки корзины -->
             <div id="cart-button" class="cart-button">
                 🛒 <span id="cart-counter">0</span>
             </div>
         </header>
-
         <main id="product-catalog" class="product-catalog">
-            <!-- Карточки товаров будут вставлены сюда с помощью JavaScript -->
+            <!-- Карточки товаров -->
         </main>
-
         <div id="loader">Загрузка товаров...</div>
     </div>
-
-    <!-- Модальное окно корзины (изначально скрыто) -->
+    <!-- Модальное окно корзины -->
     <div id="cart-modal" class="modal-overlay">
         <div class="modal-content">
             <button id="close-cart-button" class="close-button">&times;</button>
             <h2>Ваша корзина</h2>
-            <div id="cart-items-container">
-                <!-- Сюда будут добавляться товары из корзины -->
-            </div>
+            <div id="cart-items-container"></div>
             <div class="cart-summary">
                 <strong>Итого: <span id="cart-total-price">0</span> RUB</strong>
             </div>
@@ -47,10 +40,8 @@
             </div>
         </div>
     </div>
-
-    <!-- Подключение скриптов -->
+    <!-- Скрипты -->
     <script src="config.js"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
