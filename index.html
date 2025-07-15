@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка...</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <header class="shop-header">
+            <div class="shop-logo">
+                <img id="logo-img" src="" alt="Логотип">
+            </div>
+            <h1 id="shop-title" class="shop-title"></h1>
+            <!-- Элемент для кнопки корзины -->
+            <div id="cart-button" class="cart-button">
+                🛒 <span id="cart-counter">0</span>
+            </div>
+        </header>
+
+        <!-- Раздел для отображения категорий -->
+        <main id="category-catalog" class="category-catalog">
+            <!-- Карточки категорий будут вставлены сюда с помощью JavaScript -->
+        </main>
+
+        <!-- Раздел для отображения товаров (изначально скрыт) -->
+        <main id="product-catalog" class="product-catalog" style="display: none;">
+            <button id="back-to-categories" class="back-button" style="display: none;">← Назад к категориям</button>
+            <!-- Карточки товаров будут вставлены сюда с помощью JavaScript -->
+        </main>
+
+        <div id="loader">Загрузка...</div>
+    </div>
+
+    <!-- Модальное окно корзины (изначально скрыто) -->
+    <div id="cart-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button id="close-cart-button" class="close-button">&times;</button>
+            <h2>Ваша корзина</h2>
+            <div id="cart-items-container">
+                <!-- Сюда будут добавляться товары из корзины -->
+            </div>
+            <div class="cart-summary">
+                <strong>Итого: <span id="cart-total-price">0</span> RUB</strong>
+            </div>
+            <div id="order-form">
+                <h3>Оформление заказа</h3>
+                <input type="text" id="name-input" placeholder="Ваше имя" required>
+                <input type="tel" id="phone-input" placeholder="Ваш номер телефона" required>
+                <input type="text" id="address-input" placeholder="Адрес доставки" required>
+                
+                <div class="payment-methods">
+                    <h4>Способ оплаты:</h4>
+                    <label>
+                        <input type="radio" name="payment-method" value="cash" checked> Наличными
+                    </label>
+                    <label>
+                        <input type="radio" name="payment-method" value="card"> Банковской картой
+                    </label>
+                </div>
+
+                <button id="submit-order-button" class="submit-order-button">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключение скриптов -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
