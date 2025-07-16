@@ -3,71 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мини Магазин</title>
-    <!-- Подключение файла стилей -->
+    <title>Загрузка...</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+
     <div class="container">
-        <div class="header">
-            <h1>🛍️ Мини Магазин</h1>
-            <p>Лучшие товары для вас</p>
-        </div>
-        
-        <div class="content">
-            <div class="section-title">Категории</div>
-            <div class="categories" id="categories-container">
-                <!-- Категории будут динамически загружаться из JavaScript -->
+        <header class="shop-header">
+            <div class="shop-logo">
+                <img id="logo-img" src="" alt="Логотип">
             </div>
-            
-            <div class="section-title">Товары</div>
-            <div class="products" id="products"></div>
-        </div>
-        
-        <button class="cart-button" onclick="openCart()">
-            🛒
-            <span class="cart-count" id="cart-count">0</span>
-        </button>
-        
-        <div class="modal" id="cart-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">Корзина</h2>
-                    <button class="close-btn" onclick="closeCart()">&times;</button>
-                </div>
-                <div id="cart-items"></div>
-                <div class="cart-total" id="cart-total" style="display: none;">
-                    <h3>Итого:</h3>
-                    <p id="total-price">0 ₽</p>
-                </div>
-                <div class="order-form" id="order-form" style="display: none;">
-                    <div class="form-group">
-                        <label for="customer-name">Имя</label>
-                        <input type="text" id="customer-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="customer-phone">Телефон</label>
-                        <input type="tel" id="customer-phone" required>
-                    </div>
-                    <div class="form-group optional">
-                        <label for="customer-company">Организация</label>
-                        <input type="text" id="customer-company">
-                    </div>
-                    <div class="form-group">
-                        <label for="delivery-address">Адрес доставки</label>
-                        <textarea id="delivery-address" rows="3" required></textarea>
-                    </div>
-                    <button class="order-btn" onclick="placeOrder()">Оформить заказ</button>
-                </div>
+            <h1 id="shop-title" class="shop-title"></h1>
+            <!-- Элемент для кнопки корзины -->
+            <div id="cart-button" class="cart-button">
+                🛒 <span id="cart-counter">0</span>
             </div>
-        </div>
-        
-        <div class="success-message" id="success-message">
-            ✅ Заказ успешно оформлен!
+        </header>
+
+        <!-- Секция категорий -->
+        <section class="categories-section">
+            <h2 class="section-title">Категории</h2>
+            <div id="categories-container" class="categories-container">
+                <!-- Кнопки категорий будут вставлены сюда с помощью JavaScript -->
+            </div>
+        </section>
+
+        <h2 class="section-title">Товары</h2>
+        <main id="product-catalog" class="product-catalog">
+            <!-- Карточки товаров будут вставлены сюда с помощью JavaScript -->
+        </main>
+
+        <div id="loader">Загрузка товаров...</div>
+    </div>
+
+    <!-- Модальное окно корзины (изначально скрыто) -->
+    <div id="cart-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button id="close-cart-button" class="close-button">&times;</button>
+            <h2>Ваша корзина</h2>
+            <div id="cart-items-container">
+                <!-- Сюда будут добавляться товары из корзины -->
+            </div>
+            <div class="cart-summary">
+                <strong>Итого: <span id="cart-total-price">0</span> RUB</strong>
+            </div>
+            <div id="order-form">
+                <h3>Оформление заказа</h3>
+                <input type="text" id="customer-name-input" placeholder="Ваше имя" required>
+                <input type="tel" id="phone-input" placeholder="Ваш номер телефона" required>
+                <input type="text" id="address-input" placeholder="Адрес доставки" required>
+                <div class="payment-method-selection">
+                    <label>
+                        <input type="radio" name="payment-method" value="cash" checked> Наличными
+                    </label>
+                    <label>
+                        <input type="radio" name="payment-method" value="card"> Банковской картой
+                    </label>
+                </div>
+                <button id="submit-order-button" class="submit-order-button">Оформить заказ</button>
+            </div>
         </div>
     </div>
 
-    <!-- Подключение файла скриптов -->
+    <!-- Подключение скриптов -->
+    <script src="config.js"></script>
     <script src="script.js"></script>
+
 </body>
 </html>
