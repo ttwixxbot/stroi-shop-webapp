@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мини Магазин</title>
-    <!-- Подключение файла стилей. В реальном проекте это был бы отдельный файл style.css -->
+    <!-- Подключение файла стилей -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,23 +16,8 @@
         
         <div class="content">
             <div class="section-title">Категории</div>
-            <div class="categories">
-                <div class="category-card" onclick="showCategory('electronics')">
-                    <h3>📱 Электроника</h3>
-                    <p>Смартфоны, планшеты</p>
-                </div>
-                <div class="category-card" onclick="showCategory('clothing')">
-                    <h3>👕 Одежда</h3>
-                    <p>Модная одежда</p>
-                </div>
-                <div class="category-card" onclick="showCategory('books')">
-                    <h3>📚 Книги</h3>
-                    <p>Интересные книги</p>
-                </div>
-                <div class="category-card" onclick="showCategory('home')">
-                    <h3>🏠 Дом</h3>
-                    <p>Товары для дома</p>
-                </div>
+            <div class="categories" id="categories-container">
+                <!-- Категории будут динамически загружаться из JavaScript -->
             </div>
             
             <div class="section-title">Товары</div>
@@ -82,7 +67,7 @@
         </div>
     </div>
 
-    <!-- Подключение файла скриптов. В реальном проекте это был бы отдельный файл script.js -->
+    <!-- Подключение файла скриптов -->
     <script src="script.js"></script>
 </body>
 </html>
