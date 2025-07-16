@@ -3,45 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Загрузка...</title>
+    <title>Мини Магазин</title>
+    <!-- Подключение файла стилей. В реальном проекте это был бы отдельный файл style.css -->
     <link rel="stylesheet" href="style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="container">
-        <header class="shop-header">
-            <div class="shop-logo">
-                <img id="logo-img" src="" alt="Логотип">
+        <div class="header">
+            <h1>🛍️ Мини Магазин</h1>
+            <p>Лучшие товары для вас</p>
+        </div>
+        
+        <div class="content">
+            <div class="section-title">Категории</div>
+            <div class="categories">
+                <div class="category-card" onclick="showCategory('electronics')">
+                    <h3>📱 Электроника</h3>
+                    <p>Смартфоны, планшеты</p>
+                </div>
+                <div class="category-card" onclick="showCategory('clothing')">
+                    <h3>👕 Одежда</h3>
+                    <p>Модная одежда</p>
+                </div>
+                <div class="category-card" onclick="showCategory('books')">
+                    <h3>📚 Книги</h3>
+                    <p>Интересные книги</p>
+                </div>
+                <div class="category-card" onclick="showCategory('home')">
+                    <h3>🏠 Дом</h3>
+                    <p>Товары для дома</p>
+                </div>
             </div>
-            <h1 id="shop-title" class="shop-title"></h1>
-            <div id="cart-button" class="cart-button">
-                🛒 <span id="cart-counter">0</span>
-            </div>
-        </header>
-        <main id="product-catalog" class="product-catalog">
-            <!-- Карточки товаров -->
-        </main>
-        <div id="loader">Загрузка товаров...</div>
-    </div>
-    <!-- Модальное окно корзины -->
-    <div id="cart-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button id="close-cart-button" class="close-button">&times;</button>
-            <h2>Ваша корзина</h2>
-            <div id="cart-items-container"></div>
-            <div class="cart-summary">
-                <strong>Итого: <span id="cart-total-price">0</span> RUB</strong>
-            </div>
-            <div id="order-form">
-                <h3>Оформление заказа</h3>
-                <input type="tel" id="phone-input" placeholder="Ваш номер телефона" required>
-                <input type="text" id="address-input" placeholder="Адрес доставки" required>
-                <button id="submit-order-button" class="submit-order-button">Оформить заказ</button>
+            
+            <div class="section-title">Товары</div>
+            <div class="products" id="products"></div>
+        </div>
+        
+        <button class="cart-button" onclick="openCart()">
+            🛒
+            <span class="cart-count" id="cart-count">0</span>
+        </button>
+        
+        <div class="modal" id="cart-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Корзина</h2>
+                    <button class="close-btn" onclick="closeCart()">&times;</button>
+                </div>
+                <div id="cart-items"></div>
+                <div class="cart-total" id="cart-total" style="display: none;">
+                    <h3>Итого:</h3>
+                    <p id="total-price">0 ₽</p>
+                </div>
+                <div class="order-form" id="order-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="customer-name">Имя</label>
+                        <input type="text" id="customer-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Телефон</label>
+                        <input type="tel" id="customer-phone" required>
+                    </div>
+                    <div class="form-group optional">
+                        <label for="customer-company">Организация</label>
+                        <input type="text" id="customer-company">
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-address">Адрес доставки</label>
+                        <textarea id="delivery-address" rows="3" required></textarea>
+                    </div>
+                    <button class="order-btn" onclick="placeOrder()">Оформить заказ</button>
+                </div>
             </div>
         </div>
+        
+        <div class="success-message" id="success-message">
+            ✅ Заказ успешно оформлен!
+        </div>
     </div>
-    <!-- Скрипты -->
-    <script src="config.js"></script>
+
+    <!-- Подключение файла скриптов. В реальном проекте это был бы отдельный файл script.js -->
     <script src="script.js"></script>
 </body>
 </html>
