@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>СтройМаркет Pro</title>
+    <title>Загрузка...</title>
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -20,63 +20,60 @@
         </header>
 
         <section class="categories-section">
-            <h2 class="section-title"></h2>
+            <h2 class="section-title">🏗️ Категории товаров</h2>
             <div id="categories-container" class="categories-container">
                 <!-- Категории будут добавлены здесь -->
             </div>
         </section>
 
         <section class="products-section">
-            <h2 class="section-title"></h2>
+            <h2 class="section-title">🛠️ Наши товары</h2>
             <main id="product-catalog" class="product-catalog">
                 <!-- Карточки товаров будут добавлены здесь -->
             </main>
         </section>
 
-        <div id="loader">
+        <div id="loader" style="display: block;">
             <div class="loader-spinner"></div>
             Загрузка товаров...
         </div>
+    </div>
 
-        <!-- Модальное окно корзины -->
-        <div id="cart-modal" class="modal-overlay" style="display: none;">
-            <div class="modal-content">
-                <button id="close-cart-button" class="close-button">&times;</button>
-                <h2 class="section-title">🛒 Ваша корзина</h2>
-                <div id="cart-items-container" class="cart-items-container">
-                    <!-- Элементы корзины будут здесь -->
+    <!-- Модальное окно корзины -->
+    <div id="cart-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button id="close-cart-button" class="close-button">×</button>
+            <h2>🛒 Ваша корзина</h2>
+            <div id="cart-items-container">
+                <!-- Товары корзины будут добавлены здесь -->
+            </div>
+            <div class="cart-summary" style="display: none;">
+                <strong>💰 Итого: <span id="cart-total-price">0 ₽</span></strong>
+            </div>
+            <div id="order-form" style="display: none;">
+                <h3>📋 Оформление заказа</h3>
+                <input type="text" id="customer-name-input" placeholder="👤 Ваше имя" required>
+                <input type="text" id="organization-input" placeholder="🏢 Организация (необязательно)">
+                <input type="tel" id="phone-input" placeholder="📱 Номер телефона" required>
+                <input type="text" id="address-input" placeholder="📍 Адрес доставки" required>
+                <div class="payment-method-selection">
+                    <label>
+                        <input type="radio" name="payment-method" value="cash" checked> 💵 Наличными
+                    </label>
+                    <label>
+                        <input type="radio" name="payment-method" value="card"> 💳 Картой
+                    </label>
                 </div>
-                <div class="cart-summary">
-                    <strong>Всего: <span id="cart-total-price">0 ₽</span></strong>
-                </div>
-
-                <form id="order-form">
-                    <h3>📋 Оформление заказа</h3>
-                    <input type="text" id="customer-name-input" placeholder="Ваше имя *" required>
-                    <input type="text" id="organization-input" placeholder="Название организации (необязательно)">
-                    <input type="tel" id="phone-input" placeholder="Номер телефона *" required>
-                    <input type="text" id="address-input" placeholder="Адрес доставки *" required>
-
-                    <div class="payment-method-selection">
-                        <label>
-                            <input type="radio" name="payment-method" value="cash" checked>
-                            💵 Наличными
-                        </label>
-                        <label>
-                            <input type="radio" name="payment-method" value="card">
-                            💳 Безналичный
-                        </label>
-                    </div>
-                    <button type="button" id="submit-order-button" class="submit-order-button">Оформить заказ</button>
-                </form>
+                <button id="submit-order-button" class="submit-order-button">
+                    ✅ Оформить заказ
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Подключаем файлы конфигурации и логики -->
-    <script src="shop-config.js"></script>
-    <script src="categories.js"></script>
-    <script src="embedded-catalog.js"></script>
-    <script src="app.js"></script>
+    <!-- Подключение скриптов -->
+    <script src="config/shop-config.js"></script>
+    <script src="config/categories.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

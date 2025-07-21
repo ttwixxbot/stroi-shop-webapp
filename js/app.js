@@ -6,8 +6,7 @@ class ShopApp {
     constructor() {
         this.tg = window.Telegram?.WebApp;
         this.cart = [];
-        // Используем EMBEDDED_CATALOG, который будет доступен глобально после загрузки embedded-catalog.js
-        this.allProducts = EMBEDDED_CATALOG; 
+        this.allProducts = [];
         this.currentCategory = 'Все товары';
         
         this.initTelegram();
@@ -69,12 +68,11 @@ class ShopApp {
         });
     }
 
-    // Инициализация приложения
+    // Основная инициализация
     async init() {
         this.applyConfig();
-        this.loadCustomerData(); // Загружаем сохраненные данные клиента
         this.renderCategories();
-        await this.loadProducts(); // Загружаем товары
+        await this.loadProducts();
         this.filterProductsByCategory(this.currentCategory);
     }
 
@@ -85,7 +83,7 @@ class ShopApp {
         
         const logoImg = document.getElementById('logo-img');
         logoImg.src = SHOP_CONFIG.logoPath;
-        logoImg.onerror = () => { logoImg.style.display = 'none'; }; // Скрыть, если изображение не загрузилось
+        logoImg.onerror = () => { logoImg.style.display = 'none'; };
         
         // Применение цветов
         const root = document.documentElement;
@@ -97,38 +95,44 @@ class ShopApp {
         // Обновление заголовков секций
         document.querySelector('.categories-section .section-title').textContent = SHOP_CONFIG.sectionTitles.categories;
         document.querySelector('.products-section .section-title').textContent = SHOP_CONFIG.sectionTitles.products;
-        // Обновление заголовков модального окна корзины
-        document.querySelector('#cart-modal .section-title').textContent = SHOP_CONFIG.sectionTitles.cart;
-        document.querySelector('#order-form h3').textContent = SHOP_CONFIG.sectionTitles.order;
     }
 
     // Загрузка товаров
     async loadProducts() {
         try {
             this.showLoader();
-            console.log('Начинаем загрузку товаров...');
             
-            // Используем глобальную константу EMBEDDED_CATALOG, которая должна быть загружена
-            this.allProducts = EMBEDDED_CATALOG; 
-            console.log('Загружено товаров:', this.allProducts.length);
-            
-            if (this.allProducts.length === 0) {
-                console.log('Каталог пуст. Возможно, проблема с загрузкой embedded-catalog.js или catalog.json.');
-                this.showError('Каталог товаров пуст. Пожалуйста, проверьте файлы данных.');
+            // Попытка загрузить из JSON файла
+            try {
+                const response = await fetch('data/catalog.json');
+                if (response.ok) {
+                    this.allProducts = await response.json();
+                } else {
+                    throw new Error('Файл не найден');
+                }
+            } catch (error) {
+                console.log('Не удалось загрузить catalog.json, используем тестовые данные');
+                // Fallback к тестовым данным
+                this.allProducts = this.getTestProducts();
             }
             
-            // Небольшая задержка для демонстрации загрузки
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
             this.renderProducts(this.allProducts);
-            console.log('Товары успешно отрендерены');
-            
         } catch (error) {
-            console.error('Критическая ошибка загрузки товаров:', error);
-            this.showError('Не удалось загрузить товары: ' + error.message);
+            console.error('Ошибка загрузки товаров:', error);
+            this.showError('Не удалось загрузить товары');
         } finally {
             this.hideLoader();
         }
+    }
+
+    // Тестовые данные (fallback)
+    getTestProducts() {
+        return [
+            { id: 1, sku: "SHR-3545-001", name: "Шурупы универсальные 3,5x45", description: "Шурупы высокого качества для крепления различных материалов", price: 34.30, photo: "https://images.unsplash.com/photo-1609205292622-0d43b9e24f11?w=300&h=300&fit=crop", category: "Крепеж" },
+            { id: 2, sku: "KRA-10L-003", name: "Краска водоэмульсионная белая 10л", description: "Высококачественная водоэмульсионная краска для внутренних работ", price: 478.60, photo: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&h=300&fit=crop", category: "Лакокрасочные" },
+            { id: 3, sku: "DRL-850W-006", name: "Дрель ударная 850Вт", description: "Профессиональная ударная дрель с регулировкой оборотов", price: 1650.00, photo: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&h=300&fit=crop", category: "Инструменты" },
+            { id: 4, sku: "CEM-M500-009", name: "Цемент М500 50кг", description: "Портландцемент марки 500 для приготовления бетона", price: 160.10, photo: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop", category: "Стройматериалы" }
+        ];
     }
 
     // Показать загрузчик
@@ -155,31 +159,25 @@ class ShopApp {
 
     // Отображение товаров
     renderProducts(productsToRender) {
-        console.log('Рендеринг товаров:', productsToRender.length);
         this.elements.catalogContainer.innerHTML = '';
         
-        if (!productsToRender || productsToRender.length === 0) {
-            console.log('Нет товаров для отображения');
+        if (productsToRender.length === 0) {
             this.elements.catalogContainer.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: white;">
                     <div style="font-size: 48px; margin-bottom: 16px;">🤷‍♂️</div>
                     <p style="font-size: 18px; opacity: 0.8;">${SHOP_CONFIG.messages.noProducts}</p>
-                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 8px; color: white; cursor: pointer;">🔄 Перезагрузить</button>
                 </div>
             `;
             return;
         }
         
-        console.log('Создаем карточки товаров...');
         productsToRender.forEach((product, index) => {
-            console.log(`Создаем карточку для товара ${index + 1}:`, product.name);
             const card = this.createProductCard(product);
             if (SHOP_CONFIG.animation.enabled) {
                 card.style.animationDelay = `${index * SHOP_CONFIG.animation.staggerDelay}ms`;
             }
             this.elements.catalogContainer.appendChild(card);
         });
-        console.log('Все карточки товаров созданы');
     }
 
     // Создание карточки товара
@@ -330,11 +328,6 @@ class ShopApp {
     openCart() {
         this.elements.cartModal.style.display = 'flex';
         this.renderCartItems();
-        
-        // Проверяем, что у нас есть доступ к элементу формы
-        setTimeout(() => {
-            this.loadCustomerData();
-        }, 100);
     }
 
     closeCart() {
@@ -347,8 +340,7 @@ class ShopApp {
         const organization = this.elements.organizationInput.value.trim();
         const phone = this.elements.phoneInput.value.trim();
         const address = this.elements.addressInput.value.trim();
-        const paymentMethodRadio = document.querySelector('input[name="payment-method"]:checked');
-        const paymentMethod = paymentMethodRadio ? paymentMethodRadio.value : '';
+        const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
 
         if (this.cart.length === 0) {
             this.showAlert(SHOP_CONFIG.messages.emptyCart);
@@ -360,19 +352,6 @@ class ShopApp {
             return;
         }
 
-        // Сохраняем данные клиента для будущих заказов
-        const customerData = {
-            name: customerName,
-            organization: organization,
-            phone: phone,
-            address: address,
-            paymentMethod: paymentMethod
-        };
-        this.saveCustomerData(customerData);
-
-        // Получаем данные пользователя Telegram
-        const tgUser = this.tg?.initDataUnsafe?.user || {};
-        
         const orderData = {
             items: this.cart.map(p => ({ 
                 id: p.id, 
@@ -387,11 +366,7 @@ class ShopApp {
                 organization: organization || 'Не указана',
                 phone: phone,
                 address: address,
-                paymentMethod: this.getPaymentMethodLabel(paymentMethod),
-                telegramId: tgUser.id || null,
-                telegramUsername: tgUser.username || null,
-                telegramFirstName: tgUser.first_name || null,
-                telegramLastName: tgUser.last_name || null
+                paymentMethod: this.getPaymentMethodLabel(paymentMethod)
             },
             orderDate: new Date().toISOString(),
             shopInfo: {
@@ -405,7 +380,7 @@ class ShopApp {
 
     getPaymentMethodLabel(value) {
         const method = SHOP_CONFIG.paymentMethods.find(m => m.value === value);
-        return method ? method.label : 'Наличными';
+        return method ? method.label : 'Не указан';
     }
 
     processOrder(orderData) {
@@ -448,92 +423,7 @@ class ShopApp {
         if (this.tg && this.tg.showAlert) {
             this.tg.showAlert(message);
         } else {
-            alert(message); // Используем alert как запасной вариант для отладки в браузере
-        }
-    }
-
-    // Загрузка сохраненных данных клиента
-    loadCustomerData() {
-        try {
-            // Получаем данные пользователя Telegram
-            const tgUser = this.tg?.initDataUnsafe?.user;
-            const userId = tgUser?.id;
-            
-            if (userId) {
-                // Создаем ключ для хранения данных конкретного пользователя
-                const storageKey = `customer_data_${userId}`;
-                const savedData = this.getFromStorage(storageKey);
-                
-                if (savedData) {
-                    // Автоматически заполняем поля формы
-                    if (this.elements.customerNameInput) {
-                        this.elements.customerNameInput.value = savedData.name || '';
-                    }
-                    if (this.elements.organizationInput) {
-                        this.elements.organizationInput.value = savedData.organization || '';
-                    }
-                    if (this.elements.phoneInput) {
-                        this.elements.phoneInput.value = savedData.phone || '';
-                    }
-                    if (this.elements.addressInput) {
-                        this.elements.addressInput.value = savedData.address || '';
-                    }
-                    
-                    // Восстанавливаем способ оплаты
-                    if (savedData.paymentMethod) {
-                        const paymentRadio = document.querySelector(`input[name="payment-method"][value="${savedData.paymentMethod}"]`);
-                        if (paymentRadio) {
-                            paymentRadio.checked = true;
-                        }
-                    }
-                    
-                    console.log('Данные клиента загружены:', savedData);
-                }
-            }
-        } catch (error) {
-            console.log('Ошибка при загрузке данных клиента:', error);
-        }
-    }
-
-    // Сохранение данных клиента
-    saveCustomerData(customerData) {
-        try {
-            const tgUser = this.tg?.initDataUnsafe?.user;
-            const userId = tgUser?.id;
-            
-            if (userId) {
-                const storageKey = `customer_data_${userId}`;
-                // Используем Telegram Cloud Storage, если доступен
-                if (this.tg && this.tg.CloudStorage) {
-                    this.tg.CloudStorage.setItem(key, JSON.stringify(data));
-                } else {
-                    // В противном случае, используем localStorage (для отладки вне Telegram)
-                    localStorage.setItem(storageKey, JSON.stringify(customerData));
-                }
-                console.log('Данные клиента сохранены:', customerData);
-            }
-        } catch (error) {
-            console.log('Ошибка при сохранении данных клиента:', error);
-        }
-    }
-
-    // Универсальные методы для работы с хранилищем
-    getFromStorage(key) {
-        try {
-            // Сначала пытаемся получить из Telegram Cloud Storage
-            if (this.tg && this.tg.CloudStorage) {
-                // CloudStorage.getItem является асинхронным, поэтому его нужно обрабатывать по-другому
-                // Для простоты, здесь мы возвращаем null и предполагаем, что loadCustomerData
-                // будет вызван после получения данных из CloudStorage
-                return null; 
-            } else {
-                // Если CloudStorage недоступен, используем localStorage
-                const saved = localStorage.getItem(key);
-                return saved ? JSON.parse(saved) : null;
-            }
-        } catch (error) {
-            console.log('Ошибка получения из хранилища:', error);
-            return null;
+            alert(message);
         }
     }
 
