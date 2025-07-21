@@ -436,25 +436,31 @@ class ShopApp {
 
     // Отображение товаров
     renderProducts(productsToRender) {
+        console.log('Рендеринг товаров:', productsToRender.length);
         this.elements.catalogContainer.innerHTML = '';
         
-        if (productsToRender.length === 0) {
+        if (!productsToRender || productsToRender.length === 0) {
+            console.log('Нет товаров для отображения');
             this.elements.catalogContainer.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: white;">
                     <div style="font-size: 48px; margin-bottom: 16px;">🤷‍♂️</div>
                     <p style="font-size: 18px; opacity: 0.8;">${SHOP_CONFIG.messages.noProducts}</p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 8px; color: white; cursor: pointer;">🔄 Перезагрузить</button>
                 </div>
             `;
             return;
         }
         
+        console.log('Создаем карточки товаров...');
         productsToRender.forEach((product, index) => {
+            console.log(`Создаем карточку для товара ${index + 1}:`, product.name);
             const card = this.createProductCard(product);
             if (SHOP_CONFIG.animation.enabled) {
                 card.style.animationDelay = `${index * SHOP_CONFIG.animation.staggerDelay}ms`;
             }
             this.elements.catalogContainer.appendChild(card);
         });
+        console.log('Все карточки товаров созданы');
     }
 
     // Создание карточки товара
