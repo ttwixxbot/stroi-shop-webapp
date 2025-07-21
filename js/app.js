@@ -178,6 +178,16 @@ class ShopApp {
                         }
                     }
                     
+                    // Показываем индикатор сохраненных данных
+                    const indicator = document.getElementById('saved-data-indicator');
+                    if (indicator) {
+                        indicator.style.display = 'block';
+                        // Скрываем индикатор через 5 секунд
+                        setTimeout(() => {
+                            indicator.style.display = 'none';
+                        }, 5000);
+                    }
+                    
                     console.log('Данные клиента загружены:', savedData);
                 }
             }
