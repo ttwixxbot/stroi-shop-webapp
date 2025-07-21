@@ -380,7 +380,7 @@ class ShopApp {
 
     getPaymentMethodLabel(value) {
         const method = SHOP_CONFIG.paymentMethods.find(m => m.value === value);
-        return method ? method.label : 'Не указан';
+        return method ? method.label : 'Наличными';
     }
 
     processOrder(orderData) {
