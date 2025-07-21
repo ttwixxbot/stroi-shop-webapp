@@ -42,7 +42,7 @@ const SHOP_CONFIG = {
     // === СПОСОБЫ ОПЛАТЫ ===
     paymentMethods: [
         { value: "cash", label: "💵 Наличными", enabled: true },
-        { value: "card", label: "💳 Картой", enabled: true },
+        { value: "card", label: "💳 Безналичный", enabled: true },
         { value: "transfer", label: "🏦 Переводом", enabled: false }
     ],
     
