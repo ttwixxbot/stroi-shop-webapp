@@ -105,21 +105,28 @@ class ShopApp {
             
             // Попытка загрузить из JSON файла
             try {
+                console.log('Попытка загрузки catalog.json...');
                 const response = await fetch('data/catalog.json');
+                console.log('Ответ сервера:', response.status, response.statusText);
+                
                 if (response.ok) {
-                    this.allProducts = await response.json();
+                    const data = await response.json();
+                    console.log('Загружено товаров:', data.length);
+                    this.allProducts = data;
                 } else {
-                    throw new Error('Файл не найден');
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
             } catch (error) {
-                console.log('Не удалось загрузить catalog.json, используем тестовые данные');
+                console.log('Ошибка загрузки catalog.json:', error);
+                console.log('Используем тестовые данные...');
                 // Fallback к тестовым данным
                 this.allProducts = this.getTestProducts();
+                console.log('Загружены тестовые товары:', this.allProducts.length);
             }
             
             this.renderProducts(this.allProducts);
         } catch (error) {
-            console.error('Ошибка загрузки товаров:', error);
+            console.error('Критическая ошибка загрузки товаров:', error);
             this.showError('Не удалось загрузить товары');
         } finally {
             this.hideLoader();
@@ -130,9 +137,17 @@ class ShopApp {
     getTestProducts() {
         return [
             { id: 1, sku: "SHR-3545-001", name: "Шурупы универсальные 3,5x45", description: "Шурупы высокого качества для крепления различных материалов", price: 34.30, photo: "https://images.unsplash.com/photo-1609205292622-0d43b9e24f11?w=300&h=300&fit=crop", category: "Крепеж" },
-            { id: 2, sku: "KRA-10L-003", name: "Краска водоэмульсионная белая 10л", description: "Высококачественная водоэмульсионная краска для внутренних работ", price: 478.60, photo: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&h=300&fit=crop", category: "Лакокрасочные" },
-            { id: 3, sku: "DRL-850W-006", name: "Дрель ударная 850Вт", description: "Профессиональная ударная дрель с регулировкой оборотов", price: 1650.00, photo: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&h=300&fit=crop", category: "Инструменты" },
-            { id: 4, sku: "CEM-M500-009", name: "Цемент М500 50кг", description: "Портландцемент марки 500 для приготовления бетона", price: 160.10, photo: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop", category: "Стройматериалы" }
+            { id: 2, sku: "SAM-4216-002", name: "Саморезы по металлу 4,2x16", description: "Саморезы для крепления листового металла, профилей", price: 32.99, photo: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=300&h=300&fit=crop", category: "Крепеж" },
+            { id: 3, sku: "KRA-10L-003", name: "Краска водоэмульсионная белая 10л", description: "Высококачественная водоэмульсионная краска для внутренних работ", price: 478.60, photo: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&h=300&fit=crop", category: "Лакокрасочные" },
+            { id: 4, sku: "GRU-5L-004", name: "Грунтовка глубокого проникновения 5л", description: "Акриловая грунтовка для укрепления основания", price: 346.00, photo: "https://images.unsplash.com/photo-1572021335469-31706a17aaef?w=300&h=300&fit=crop", category: "Лакокрасочные" },
+            { id: 5, sku: "KLE-PVA-005", name: "Клей ПВА строительный 1кг", description: "Универсальный клей для строительных работ", price: 123.00, photo: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=300&h=300&fit=crop", category: "Лакокрасочные" },
+            { id: 6, sku: "DRL-850W-006", name: "Дрель ударная 850Вт", description: "Профессиональная ударная дрель с регулировкой оборотов", price: 1650.00, photo: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&h=300&fit=crop", category: "Инструменты" },
+            { id: 7, sku: "BOL-125-007", name: "Болгарка 125мм 900Вт", description: "Углошлифовальная машина для резки и шлифовки", price: 404.90, photo: "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=300&h=300&fit=crop", category: "Инструменты" },
+            { id: 8, sku: "PER-SDS-008", name: "Перфоратор SDS-Plus 800Вт", description: "Мощный перфоратор для сверления отверстий в бетоне", price: 1332.00, photo: "https://images.unsplash.com/photo-1609205292622-0d43b9e24f11?w=300&h=300&fit=crop", category: "Инструменты" },
+            { id: 9, sku: "CEM-M500-009", name: "Цемент М500 50кг", description: "Портландцемент марки 500 для приготовления бетона", price: 160.10, photo: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop", category: "Стройматериалы" },
+            { id: 10, sku: "PLI-KER-010", name: "Плитка керамическая 20x30см", description: "Качественная керамическая плитка для ванной и кухни", price: 360.90, photo: "https://images.unsplash.com/photo-1584622615551-44b7b1b3b9ad?w=300&h=300&fit=crop", category: "Стройматериалы" },
+            { id: 11, sku: "KAB-VVG-011", name: "Кабель ВВГ 3x2,5 мм²", description: "Медный кабель для внутренней проводки", price: 175.20, photo: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop", category: "Электрика" },
+            { id: 12, sku: "ROZ-ZEM-012", name: "Розетка с заземлением белая", description: "Электрическая розетка с заземляющим контактом", price: 163.20, photo: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop", category: "Электрика" }
         ];
     }
 
@@ -443,6 +458,11 @@ class ShopApp {
     openCart() {
         this.elements.cartModal.style.display = 'flex';
         this.renderCartItems();
+        
+        // Проверяем, что у нас есть доступ к элементу формы
+        setTimeout(() => {
+            this.loadCustomerData();
+        }, 100);
     }
 
     closeCart() {
