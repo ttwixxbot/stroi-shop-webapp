@@ -245,29 +245,19 @@ class ShopApp {
             this.showLoader();
             console.log('Начинаем загрузку товаров...');
             
-            // Сначала пробуем встроенный каталог
+            // Используем встроенный каталог
             console.log('Используем встроенный каталог товаров...');
             this.allProducts = this.getEmbeddedCatalog();
             console.log('Загружено товаров:', this.allProducts.length);
             
-            // Пробуем также загрузить из JSON (если доступно)
-            try {
-                const response = await fetch('data/catalog.json');
-                if (response.ok) {
-                    const jsonData = await response.json();
-                    if (jsonData && jsonData.length > 0) {
-                        console.log('Дополнительно загружено из JSON:', jsonData.length);
-                        this.allProducts = jsonData; // Используем данные из JSON если они есть
-                    }
-                }
-            } catch (error) {
-                console.log('JSON файл недоступен, используем встроенный каталог');
+            if (this.allProducts.length === 0) {
+                console.log('Встроенный каталог пуст, используем тестовые данные...');
+                this.allProducts = this.getTestProducts();
+                console.log('Загружено тестовых товаров:', this.allProducts.length);
             }
             
-            if (this.allProducts.length === 0) {
-                console.log('Используем тестовые данные как последний вариант...');
-                this.allProducts = this.getTestProducts();
-            }
+            // Небольшая задержка для демонстрации загрузки
+            await new Promise(resolve => setTimeout(resolve, 500));
             
             this.renderProducts(this.allProducts);
             console.log('Товары успешно отрендерены');
@@ -422,6 +412,12 @@ class ShopApp {
             console.log('Ошибка получения из хранилища:', error);
             return null;
         }
+    }
+
+    // Скрыть загрузчик
+    hideLoader() {
+        this.elements.loader.style.display = 'none';
+        this.elements.catalogContainer.style.display = 'grid';
     }
 
     // Показать ошибку
