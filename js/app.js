@@ -98,43 +98,183 @@ class ShopApp {
         document.querySelector('.products-section .section-title').textContent = SHOP_CONFIG.sectionTitles.products;
     }
 
+    // Встроенный каталог товаров (для надежности)
+    getEmbeddedCatalog() {
+        return [
+            {
+                "id": 1,
+                "sku": "SHR-3545-001",
+                "name": "Шурупы универсальные 3,5x45",
+                "description": "Шурупы высокого качества для крепления различных материалов. Подходят для дерева, гипсокартона.",
+                "price": 34.30,
+                "photo": "https://images.unsplash.com/photo-1609205292622-0d43b9e24f11?w=300&h=300&fit=crop",
+                "category": "Крепеж"
+            },
+            {
+                "id": 2,
+                "sku": "SAM-4216-002",
+                "name": "Саморезы по металлу 4,2x16",
+                "description": "Саморезы для крепления листового металла, профилей. Острый наконечник, надежная фиксация.",
+                "price": 32.99,
+                "photo": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=300&h=300&fit=crop",
+                "category": "Крепеж"
+            },
+            {
+                "id": 3,
+                "sku": "KRA-10L-003",
+                "name": "Краска водоэмульсионная белая 10л",
+                "description": "Высококачественная водоэмульсионная краска для внутренних работ. Хорошая укрывистость.",
+                "price": 478.60,
+                "photo": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&h=300&fit=crop",
+                "category": "Лакокрасочные"
+            },
+            {
+                "id": 4,
+                "sku": "GRU-5L-004",
+                "name": "Грунтовка глубокого проникновения 5л",
+                "description": "Акриловая грунтовка для укрепления основания перед покраской или поклейкой обоев.",
+                "price": 346.00,
+                "photo": "https://images.unsplash.com/photo-1572021335469-31706a17aaef?w=300&h=300&fit=crop",
+                "category": "Лакокрасочные"
+            },
+            {
+                "id": 5,
+                "sku": "KLE-PVA-005",
+                "name": "Клей ПВА строительный 1кг",
+                "description": "Универсальный клей для строительных и ремонтных работ. Экологически чистый.",
+                "price": 123.00,
+                "photo": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=300&h=300&fit=crop",
+                "category": "Лакокрасочные"
+            },
+            {
+                "id": 6,
+                "sku": "DRL-850W-006",
+                "name": "Дрель ударная 850Вт",
+                "description": "Профессиональная ударная дрель с регулировкой оборотов. В комплекте набор сверл.",
+                "price": 1650.00,
+                "photo": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&h=300&fit=crop",
+                "category": "Инструменты"
+            },
+            {
+                "id": 7,
+                "sku": "BOL-125-007",
+                "name": "Болгарка 125мм 900Вт",
+                "description": "Углошлифовальная машина для резки и шлифовки металла, камня. Защитный кожух в комплекте.",
+                "price": 404.90,
+                "photo": "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=300&h=300&fit=crop",
+                "category": "Инструменты"
+            },
+            {
+                "id": 8,
+                "sku": "PER-SDS-008",
+                "name": "Перфоратор SDS-Plus 800Вт",
+                "description": "Мощный перфоратор для сверления отверстий в бетоне и кирпиче. 3 режима работы.",
+                "price": 1332.00,
+                "photo": "https://images.unsplash.com/photo-1609205292622-0d43b9e24f11?w=300&h=300&fit=crop",
+                "category": "Инструменты"
+            },
+            {
+                "id": 9,
+                "sku": "CEM-M500-009",
+                "name": "Цемент М500 50кг",
+                "description": "Портландцемент марки 500 для приготовления бетона, растворов. Высокое качество.",
+                "price": 160.10,
+                "photo": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop",
+                "category": "Стройматериалы"
+            },
+            {
+                "id": 10,
+                "sku": "PLI-KER-010",
+                "name": "Плитка керамическая 20x30см",
+                "description": "Качественная керамическая плитка для ванной и кухни. Влагостойкая, легко моется.",
+                "price": 360.90,
+                "photo": "https://images.unsplash.com/photo-1584622615551-44b7b1b3b9ad?w=300&h=300&fit=crop",
+                "category": "Стройматериалы"
+            },
+            {
+                "id": 11,
+                "sku": "KAB-VVG-011",
+                "name": "Кабель ВВГ 3x2,5 мм²",
+                "description": "Медный кабель для внутренней проводки. Надежная изоляция, соответствует ГОСТ.",
+                "price": 175.20,
+                "photo": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop",
+                "category": "Электрика"
+            },
+            {
+                "id": 12,
+                "sku": "ROZ-ZEM-012",
+                "name": "Розетка с заземлением белая",
+                "description": "Электрическая розетка с заземляющим контактом. Современный дизайн, надежная конструкция.",
+                "price": 163.20,
+                "photo": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop",
+                "category": "Электрика"
+            },
+            {
+                "id": 13,
+                "sku": "DVR-80CM-013",
+                "name": "Дверь межкомнатная 80см",
+                "description": "Межкомнатная дверь из массива сосны. Экологически чистая, красивая текстура.",
+                "price": 2450.00,
+                "photo": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=300&h=300&fit=crop",
+                "category": "Двери и окна"
+            },
+            {
+                "id": 14,
+                "sku": "ZAM-VRZ-014",
+                "name": "Замок врезной с ключами",
+                "description": "Надежный врезной замок для межкомнатных дверей. В комплекте 3 ключа.",
+                "price": 256.10,
+                "photo": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop",
+                "category": "Двери и окна"
+            },
+            {
+                "id": 15,
+                "sku": "GIP-125-015",
+                "name": "Гипсокартон 12,5мм 1200x2500",
+                "description": "Гипсокартонный лист для внутренней отделки. Идеально ровная поверхность.",
+                "price": 447.30,
+                "photo": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop",
+                "category": "Стройматериалы"
+            }
+        ];
+    }
+
     // Загрузка товаров
     async loadProducts() {
         try {
             this.showLoader();
+            console.log('Начинаем загрузку товаров...');
             
-            // Попытка загрузить из JSON файла
+            // Сначала пробуем встроенный каталог
+            console.log('Используем встроенный каталог товаров...');
+            this.allProducts = this.getEmbeddedCatalog();
+            console.log('Загружено товаров:', this.allProducts.length);
+            
+            // Пробуем также загрузить из JSON (если доступно)
             try {
-                console.log('Попытка загрузки catalog.json...');
                 const response = await fetch('data/catalog.json');
-                console.log('Ответ сервера:', response.status, response.statusText);
-                
                 if (response.ok) {
-                    const data = await response.json();
-                    console.log('Загружено товаров из JSON:', data.length);
-                    this.allProducts = data;
-                } else {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    const jsonData = await response.json();
+                    if (jsonData && jsonData.length > 0) {
+                        console.log('Дополнительно загружено из JSON:', jsonData.length);
+                        this.allProducts = jsonData; // Используем данные из JSON если они есть
+                    }
                 }
             } catch (error) {
-                console.log('Ошибка загрузки catalog.json:', error);
-                
-                // Пробуем использовать встроенный каталог
-                if (typeof EMBEDDED_CATALOG !== 'undefined' && EMBEDDED_CATALOG.length > 0) {
-                    console.log('Используем встроенный каталог...');
-                    this.allProducts = EMBEDDED_CATALOG;
-                    console.log('Загружено товаров из встроенного каталога:', this.allProducts.length);
-                } else {
-                    console.log('Встроенный каталог не найден, используем тестовые данные...');
-                    this.allProducts = this.getTestProducts();
-                    console.log('Загружены тестовые товары:', this.allProducts.length);
-                }
+                console.log('JSON файл недоступен, используем встроенный каталог');
+            }
+            
+            if (this.allProducts.length === 0) {
+                console.log('Используем тестовые данные как последний вариант...');
+                this.allProducts = this.getTestProducts();
             }
             
             this.renderProducts(this.allProducts);
+            console.log('Товары успешно отрендерены');
+            
         } catch (error) {
             console.error('Критическая ошибка загрузки товаров:', error);
-            this.showError('Не удалось загрузить товары');
+            this.showError('Не удалось загрузить товары: ' + error.message);
         } finally {
             this.hideLoader();
         }
