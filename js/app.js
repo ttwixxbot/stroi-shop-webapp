@@ -68,9 +68,10 @@ class ShopApp {
         });
     }
 
-    // Основная инициализация
+    // Инициализация приложения
     async init() {
         this.applyConfig();
+        this.loadCustomerData(); // Загружаем сохраненные данные клиента
         this.renderCategories();
         await this.loadProducts();
         this.filterProductsByCategory(this.currentCategory);
@@ -142,9 +143,113 @@ class ShopApp {
     }
 
     // Скрыть загрузчик
-    hideLoader() {
-        this.elements.loader.style.display = 'none';
-        this.elements.catalogContainer.style.display = 'grid';
+    // Загрузка сохраненных данных клиента
+    loadCustomerData() {
+        try {
+            // Получаем данные пользователя Telegram
+            const tgUser = this.tg?.initDataUnsafe?.user;
+            const userId = tgUser?.id;
+            
+            if (userId) {
+                // Создаем ключ для хранения данных конкретного пользователя
+                const storageKey = `customer_data_${userId}`;
+                const savedData = this.getFromStorage(storageKey);
+                
+                if (savedData) {
+                    // Автоматически заполняем поля формы
+                    if (this.elements.customerNameInput) {
+                        this.elements.customerNameInput.value = savedData.name || '';
+                    }
+                    if (this.elements.organizationInput) {
+                        this.elements.organizationInput.value = savedData.organization || '';
+                    }
+                    if (this.elements.phoneInput) {
+                        this.elements.phoneInput.value = savedData.phone || '';
+                    }
+                    if (this.elements.addressInput) {
+                        this.elements.addressInput.value = savedData.address || '';
+                    }
+                    
+                    // Восстанавливаем способ оплаты
+                    if (savedData.paymentMethod) {
+                        const paymentRadio = document.querySelector(`input[name="payment-method"][value="${savedData.paymentMethod}"]`);
+                        if (paymentRadio) {
+                            paymentRadio.checked = true;
+                        }
+                    }
+                    
+                    console.log('Данные клиента загружены:', savedData);
+                }
+            }
+        } catch (error) {
+            console.log('Ошибка при загрузке данных клиента:', error);
+        }
+    }
+
+    // Сохранение данных клиента
+    saveCustomerData(customerData) {
+        try {
+            const tgUser = this.tg?.initDataUnsafe?.user;
+            const userId = tgUser?.id;
+            
+            if (userId) {
+                const storageKey = `customer_data_${userId}`;
+                this.saveToStorage(storageKey, customerData);
+                console.log('Данные клиента сохранены:', customerData);
+            }
+        } catch (error) {
+            console.log('Ошибка при сохранении данных клиента:', error);
+        }
+    }
+
+    // Универсальные методы для работы с хранилищем
+    saveToStorage(key, data) {
+        try {
+            // Используем переменную в памяти для хранения данных
+            if (!window.shopStorage) {
+                window.shopStorage = {};
+            }
+            window.shopStorage[key] = data;
+            
+            // Дополнительно пытаемся сохранить в Telegram Cloud Storage
+            if (this.tg && this.tg.CloudStorage) {
+                this.tg.CloudStorage.setItem(key, JSON.stringify(data));
+            }
+        } catch (error) {
+            console.log('Ошибка сохранения в хранилище:', error);
+        }
+    }
+
+    getFromStorage(key) {
+        try {
+            // Сначала проверяем переменную в памяти
+            if (window.shopStorage && window.shopStorage[key]) {
+                return window.shopStorage[key];
+            }
+            
+            // Затем пытаемся получить из Telegram Cloud Storage
+            if (this.tg && this.tg.CloudStorage) {
+                this.tg.CloudStorage.getItem(key, (error, result) => {
+                    if (!error && result) {
+                        try {
+                            const data = JSON.parse(result);
+                            if (!window.shopStorage) {
+                                window.shopStorage = {};
+                            }
+                            window.shopStorage[key] = data;
+                            this.loadCustomerData(); // Перезагружаем данные
+                        } catch (e) {
+                            console.log('Ошибка парсинга данных из CloudStorage:', e);
+                        }
+                    }
+                });
+            }
+            
+            return null;
+        } catch (error) {
+            console.log('Ошибка получения из хранилища:', error);
+            return null;
+        }
     }
 
     // Показать ошибку
@@ -352,6 +457,19 @@ class ShopApp {
             return;
         }
 
+        // Сохраняем данные клиента для будущих заказов
+        const customerData = {
+            name: customerName,
+            organization: organization,
+            phone: phone,
+            address: address,
+            paymentMethod: paymentMethod
+        };
+        this.saveCustomerData(customerData);
+
+        // Получаем данные пользователя Telegram
+        const tgUser = this.tg?.initDataUnsafe?.user || {};
+        
         const orderData = {
             items: this.cart.map(p => ({ 
                 id: p.id, 
@@ -366,7 +484,11 @@ class ShopApp {
                 organization: organization || 'Не указана',
                 phone: phone,
                 address: address,
-                paymentMethod: this.getPaymentMethodLabel(paymentMethod)
+                paymentMethod: this.getPaymentMethodLabel(paymentMethod),
+                telegramId: tgUser.id || null,
+                telegramUsername: tgUser.username || null,
+                telegramFirstName: tgUser.first_name || null,
+                telegramLastName: tgUser.last_name || null
             },
             orderDate: new Date().toISOString(),
             shopInfo: {
