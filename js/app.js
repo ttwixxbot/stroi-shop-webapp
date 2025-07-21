@@ -111,17 +111,24 @@ class ShopApp {
                 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Загружено товаров:', data.length);
+                    console.log('Загружено товаров из JSON:', data.length);
                     this.allProducts = data;
                 } else {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
             } catch (error) {
                 console.log('Ошибка загрузки catalog.json:', error);
-                console.log('Используем тестовые данные...');
-                // Fallback к тестовым данным
-                this.allProducts = this.getTestProducts();
-                console.log('Загружены тестовые товары:', this.allProducts.length);
+                
+                // Пробуем использовать встроенный каталог
+                if (typeof EMBEDDED_CATALOG !== 'undefined' && EMBEDDED_CATALOG.length > 0) {
+                    console.log('Используем встроенный каталог...');
+                    this.allProducts = EMBEDDED_CATALOG;
+                    console.log('Загружено товаров из встроенного каталога:', this.allProducts.length);
+                } else {
+                    console.log('Встроенный каталог не найден, используем тестовые данные...');
+                    this.allProducts = this.getTestProducts();
+                    console.log('Загружены тестовые товары:', this.allProducts.length);
+                }
             }
             
             this.renderProducts(this.allProducts);
