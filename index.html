@@ -52,10 +52,10 @@
             </div>
             <div id="order-form" style="display: none;">
                 <h3>📋 Оформление заказа</h3>
-                <input type="text" id="customer-name-input" placeholder="👤 Ваше имя" required>
-                <input type="text" id="organization-input" placeholder="🏢 Организация (необязательно)">
-                <input type="tel" id="phone-input" placeholder="📱 Номер телефона" required>
-                <input type="text" id="address-input" placeholder="📍 Адрес доставки" required>
+                <input type="text" id="customer-name-input" placeholder="👤 Ваше имя *" required>
+                <input type="text" id="organization-input" placeholder="🏢 Организация *" required>
+                <input type="tel" id="phone-input" placeholder="📱 Номер телефона *" required>
+                <input type="text" id="address-input" placeholder="📍 Адрес доставки *" required>
                 <div class="payment-method-selection">
                     <label>
                         <input type="radio" name="payment-method" value="cash" checked> 💵 Наличными
@@ -72,6 +72,8 @@
     </div>
 
     <!-- Подключение скриптов -->
+    <!-- ИСПРАВЛЕНО: Сначала встроенный каталог, потом конфиги -->
+    <script src="embedded-catalog.js"></script>
     <script src="config/shop-config.js"></script>
     <script src="config/categories.js"></script>
     <script src="js/app.js"></script>

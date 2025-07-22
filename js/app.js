@@ -1,5 +1,5 @@
 // ===============================================
-// ОСНОВНАЯ ЛОГИКА МАГАЗИНА
+// ОСНОВНАЯ ЛОГИКА МАГАЗИНА - ИСПРАВЛЕННАЯ ВЕРСИЯ
 // ===============================================
 
 class ShopApp {
@@ -97,16 +97,26 @@ class ShopApp {
         document.querySelector('.products-section .section-title').textContent = SHOP_CONFIG.sectionTitles.products;
     }
 
-    // Загрузка товаров
+    // ИСПРАВЛЕНО: Загрузка товаров
     async loadProducts() {
         try {
             this.showLoader();
+            
+            // Проверяем наличие встроенного каталога
+            if (window.EMBEDDED_CATALOG && Array.isArray(window.EMBEDDED_CATALOG)) {
+                console.log('Используем встроенный каталог');
+                this.allProducts = window.EMBEDDED_CATALOG;
+                this.renderProducts(this.allProducts);
+                return;
+            }
             
             // Попытка загрузить из JSON файла
             try {
                 const response = await fetch('data/catalog.json');
                 if (response.ok) {
-                    this.allProducts = await response.json();
+                    const data = await response.json();
+                    this.allProducts = data;
+                    console.log('Каталог загружен из JSON');
                 } else {
                     throw new Error('Файл не найден');
                 }
@@ -334,7 +344,7 @@ class ShopApp {
         this.elements.cartModal.style.display = 'none';
     }
 
-    // Отправка заказа
+    // ИСПРАВЛЕНО: Отправка заказа с обязательной организацией
     submitOrder() {
         const customerName = this.elements.customerNameInput.value.trim();
         const organization = this.elements.organizationInput.value.trim();
@@ -347,10 +357,14 @@ class ShopApp {
             return;
         }
         
-        if (!customerName || !phone || !address) {
-            this.showAlert(SHOP_CONFIG.messages.fillRequiredFields);
+        // ИСПРАВЛЕНО: Организация теперь обязательна
+        if (!customerName || !organization || !phone || !address) {
+            this.showAlert('Пожалуйста, заполните все обязательные поля: имя, организацию, телефон и адрес доставки.');
             return;
         }
+
+        // Добавляем данные Telegram пользователя
+        const telegramUser = this.tg ? this.tg.initDataUnsafe.user : null;
 
         const orderData = {
             items: this.cart.map(p => ({ 
@@ -363,10 +377,15 @@ class ShopApp {
             totalPrice: this.cart.reduce((sum, p) => sum + (p.price * p.quantity), 0),
             customer: {
                 name: customerName,
-                organization: organization || 'Не указана',
+                organization: organization,
                 phone: phone,
                 address: address,
-                paymentMethod: this.getPaymentMethodLabel(paymentMethod)
+                paymentMethod: this.getPaymentMethodLabel(paymentMethod),
+                // Telegram данные пользователя
+                telegramId: telegramUser?.id || '',
+                telegramUsername: telegramUser?.username || '',
+                telegramFirstName: telegramUser?.first_name || '',
+                telegramLastName: telegramUser?.last_name || ''
             },
             orderDate: new Date().toISOString(),
             shopInfo: {
